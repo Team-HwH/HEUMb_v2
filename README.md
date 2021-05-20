@@ -2,19 +2,19 @@
 
 ## Commit message guideline
 
-> [ create (file) ]\
+> `[ create (file) ]`\
 : Use this commit message when you create any file.
 
-> [ update (file) ]\
+> `[ update (file) ]`\
 : Use this commit message when you update any file.
 
-> [ delete (file) ]\
+> `[ delete (file) ]`\
 : Use this commit message when you delete any file.
 
-> [ rename (previous name) to (file) ]\
+> `[ rename (previous name) to (file) ]`\
 : Use this commit message when you rename any file.
 
-> [ move (file) to (directory) ]\
+> `[ move (file) to (directory) ]`\
 : Use this commit message when you move any file into somewhere.
 
 ### *Guideline for file name*
