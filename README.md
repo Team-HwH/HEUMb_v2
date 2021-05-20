@@ -38,4 +38,4 @@ If the file is in the root directory of the repository, you don't have to write 
 It's not necessary but you want to write description of your commit message; you can write the purpose of your committing.
 
 # [LICENSE](LICENSE)
-This software is protected by GPLv3 license.
+This software is protected by GNU GPL 3.0 license.
