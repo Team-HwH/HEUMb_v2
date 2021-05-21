@@ -2,6 +2,7 @@ import os
 import hashlib
 import tarfile
 from CRYPTO.AES.aes import *
+from CRYPTO.A5_1.XOR_A5_1 import XOR_A5_1
 
 
 def FILE_COMP(Files, Dest):
