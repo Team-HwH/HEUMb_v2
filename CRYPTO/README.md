@@ -40,7 +40,7 @@ REMOVE_HEADER(Password, File)
 
 This function removes the (HEUM)b file header from the file which `File` refers.
 
-## Subordinate functionalities
+## Subordinate directories
 
 ### [AES](./AES)
 
