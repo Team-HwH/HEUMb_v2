@@ -50,7 +50,6 @@ def DEC_AES(Password, File):
     originsize = struct.unpack('<Q', File.read(struct.calcsize('Q')))[0]
     Password = hashlib.sha256(Password.encode('utf-8')).digest()
     chunksize = 64*1024
-    # f = open(filename + '.dec', 'wb+')
 
     aes = AES.new(Password, AES.MODE_CBC, iv)
 
@@ -72,7 +71,5 @@ def DEC_AES(Password, File):
         wpos = File.tell()
 
     File.truncate(originsize)
-
-    # os.system(f'> NUL del "{filename}" && > NUL move "{filename + ".dec"}" "{filename}"')
 
     return File
