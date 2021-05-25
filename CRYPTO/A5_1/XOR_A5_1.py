@@ -24,8 +24,8 @@ def MakeKey(x, y, z):
         Shift(y, 22, Y)
         
     if z[12] == c:
-        Z = z[15] ^ z[2] ^ z[1] ^ z[0];
-        Shift(z, 23, Z);
+        Z = z[15] ^ z[2] ^ z[1] ^ z[0]
+        Shift(z, 23, Z)
 
     return x[0] ^ y[0] ^ z[0]
 
@@ -105,21 +105,3 @@ def XOR_A5_1(Password, File, Mode='enc'):
         File.write(encData[i].to_bytes(1, byteorder="little"))
     
     return File
-
-
-'''
-if __name__ == "__main__":
-    ch = int(input("1. enc 2. dec    : "))
-    
-    f = open('test.png', 'rb+')
-    
-    password = input("input your password : ")
-    print('[+] File XOR')
-
-    x = XOR_A5_1(password, f, ch)
-
-    print('[+] XORed')
-        
-    f.close()
-
-'''
