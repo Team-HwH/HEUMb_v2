@@ -28,7 +28,7 @@ def FILE_DECOMP(File, Dest):
 
         with tarfile.open(filename) as tar:
             tar.extractall(path=Dest)
-        
+
         os.system(f'> NUL del "{filename}"')
     except Exception as ex:
         print(str(ex))
@@ -48,7 +48,7 @@ def PUT_HEADER(Password, File):
     f.write(b'\0' * 24)
 
     while True:
-        chunk = File.read(64*1024)
+        chunk = File.read(64 * 1024)
 
         if len(chunk) == 0:
             break
@@ -72,15 +72,15 @@ def REMOVE_HEADER(Password, File):
 
     if signature != 'HEUMB':
         print('This is not (HEUM)b encrypted file!')
-        exit(0)
+        return 'not HEUMb'
 
     passhash = File.read(64)
 
     if passhash != hashlib.sha512(Password.encode('utf-8')).digest():
         print('Password incorrect!')
-        exit(0)
+        return 'incorrect'
 
-    chunksize = 64*1024
+    chunksize = 64 * 1024
 
     wpos = 0
     rpos = File.tell()
@@ -104,3 +104,58 @@ def REMOVE_HEADER(Password, File):
     File.truncate(os.path.getsize(File.name) - 69)
 
     return File
+
+
+def encrypt(Files, Password, Dest):
+    try:
+        File = FILE_COMP(Files, Dest)
+
+        File = PUT_HEADER(Password, File)
+
+        File = ENC_AES(Password, File)
+
+        File = XOR_A5_1(Password, File)
+
+        File.close()
+    except Exception as ex:
+        print(str(ex))
+        return -1
+
+    return 0
+
+
+def decrypt(Filepath, Password, Dest):
+    try:
+        os.system(f'> NUL copy "{Filepath}" "{Filepath + ".dec"}"')
+
+        Filepath += '.dec'
+
+        File = open(Filepath, 'rb+')
+
+        tmp = REMOVE_HEADER(Password, File)
+
+        if tmp == 'not HEUMb':
+            File.close()
+            os.system(f'> NUL del "{Filepath}"')
+            return tmp
+        elif tmp == 'incorrect':
+            File.close()
+            os.system(f'> NUL del "{Filepath}"')
+            return tmp
+        else:
+            File = tmp
+
+        File = DEC_AES(Password, File)
+
+        File = XOR_A5_1(Password, File, 'dec')
+
+        ret = FILE_DECOMP(File, Dest)
+
+        if ret == -1:
+            print('Something went wrong while decompressing the file!\nMaybe the password was incorrect...')
+            exit(-1)
+    except Exception as ex:
+        print(str(ex))
+        return -1
+
+    return 0
