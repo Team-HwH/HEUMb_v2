@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QPushButton, QInputDialog
+from PyQt5.QtWidgets import QInputDialog, QMessageBox
+from CRYPTO.heumbcipher import *
 
 
 class Ui_HEUMb(QtWidgets.QMainWindow):
@@ -92,14 +93,49 @@ class Ui_HEUMb(QtWidgets.QMainWindow):
             return ''
 
     def ENCRYPT(self):
+        # 압축된 파일을 저장할 경로 및 파일명
         filename = QtWidgets.QFileDialog.getOpenFileNames(self, 'Select File to encrypt', '/')
+        files = []
+
         if not filename[0] == []:
             password = self.GET_PASS()
+            return_dir = QtWidgets.QFileDialog.getExistingDirectory(self, 'select folder to save compressed file', '/').replace('/', '\\')
+            while True:
+                strtmp, tmp = QInputDialog.getText(self, 'Input file name to save', 'Input file name to save')
+                if len(strtmp) > 250:
+                    QMessageBox.critical(self, 'Error', 'file name cannot be longer than 250!', QMessageBox.Yes)
+                else:
+                    break
+            dst = return_dir+'\\'+strtmp.replace('/', '\\')
+            for _ in filename[0]:
+                files.append(_.replace('/', '\\'))
+            # print("encrypt : {} {} {}".format(files, password, dst))
+            res = encrypt(files, password, dst)
+            if res == 0:
+                QMessageBox.about(self, 'encrypt', 'successfully encrypted!')
 
     def DECRYPT(self):
-        filename = QtWidgets.QFileDialog.getOpenFileNames(self, 'Select File to decrypt', '/')
+        filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File to decrypt', '/')
+
         if not filename[0] == []:
             password = self.GET_PASS()
+            return_dir = QtWidgets.QFileDialog.getExistingDirectory(self, 'select folder to unzip file', '/')
+            return_dir = return_dir.replace('/', '\\')
+            file_dir = filename[0].replace('/', '\\')
+            # print("decrypt : {} {} {}".format(file_dir, password, return_dir))
+            err = decrypt(file_dir, password, return_dir)
+
+            if err == 'not HEUMb':
+                # warning page
+                QMessageBox.critical(self, 'Error', 'This is not (HEUM)b encrypted file!', QMessageBox.Yes)
+            elif err == 'incorrect':
+                # warning page
+                QMessageBox.critical(self, 'Error', 'password is incorrect!!', QMessageBox.Yes)
+            elif err == -1:
+                QMessageBox.critical(self, 'Error', 'Something went wrong while decompressing the file!!')
+            elif err == 0:
+                QMessageBox.about(self, 'encrypt', 'successfully encrypted!')
+            # decrypt 는 경로까지만 지정
 
 
 if __name__ == "__main__":
