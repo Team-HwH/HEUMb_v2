@@ -134,11 +134,7 @@ def decrypt(Filepath, Password, Dest):
 
         tmp = REMOVE_HEADER(Password, File)
 
-        if tmp == 'not HEUMb':
-            File.close()
-            os.system(f'> NUL del "{Filepath}"')
-            return tmp
-        elif tmp == 'incorrect':
+        if str(type(tmp)) == "<class 'str'>":
             File.close()
             os.system(f'> NUL del "{Filepath}"')
             return tmp
