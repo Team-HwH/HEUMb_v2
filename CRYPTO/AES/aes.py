@@ -42,8 +42,6 @@ def ENC_AES(Password, File):
 
 
 def DEC_AES(Password, File):
-    filename = File.name
-
     File.seek(0)
 
     iv = File.read(16)
